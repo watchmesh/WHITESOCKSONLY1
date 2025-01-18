@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>White Socks Only</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <video autoplay loop muted playsinline class="background-video">
+    <source src="images/whitesocksonly.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="sidebar">
+    <nav>
+      <ul class="navigation">
+        <li><a href="#shop">Shop</a></li>
+        <li><a href="#campaign">Campaign</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="main-content">
+    <section id="shop">
+      <h2>Shop</h2>
+      <div class="slider">
+        <div class="slider-images">
+          <div class="slide">
+            <img src="images/buysock1.png" alt="White Socks (buysock1)" class="zoomable">
+          </div>
+          <div class="slide">
+            <img src="images/buysock.png" alt="White Socks (buysock)" class="zoomable">
+          </div>
+          <div class="slide">
+            <img src="images/buysock2.png" alt="White Socks (buysock2)" class="zoomable">
+          </div>
+        </div>
+        <button class="nav-button" id="prev">Previous</button>
+        <button class="nav-button" id="next">Next</button>
+      </div>
+
+      <!-- Product Selection -->
+      <div class="price">
+        <h3>Select your product:</h3>
+        <form id="product-selection-form">
+          <label>
+            <input type="radio" name="product" value="1-pair" checked>
+            1 Pair (£6)
+          </label><br>
+          <label>
+            <input type="radio" name="product" value="2-pairs">
+            2 Pairs (£10)
+          </label><br><br>
+          <button type="button" id="checkout-button" class="buy-now-button">Buy Now</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="campaign">
+      <h2>Campaign COMING SOON!</h2>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <div class="contact-container">
+        <a href="https://www.instagram.com/whitesocksonly_ldn/" target="_blank" class="main-ig-link">
+          Follow us on Instagram
+        </a>
+        <div class="profiles">
+          <a href="https://www.instagram.com/zvxx483/" target="_blank" class="profile-link">
+            <img src="images/ahmed.png" alt="Ahmed's Instagram" class="profile-image">
+          </a>
+          <a href="https://www.instagram.com/boogerfactory/" target="_blank" class="profile-link">
+            <img src="images/jay.png" alt="Jay's Instagram" class="profile-image">
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Load Stripe once, at the bottom -->
+  <script src="https://js.stripe.com/v3"></script>
+  <script src="/js/script.js"></script>
+  <script src="js/slider.js"></script>
+
+</body>
+</html>

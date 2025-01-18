@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful</title>
+    <link rel="stylesheet" href="css/style.css"> <!-- Link your main CSS -->
+    <style>
+        /* Specific styles for this page */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        /* Background Video */
+        .background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1; /* Ensure it stays behind other content */
+        }
+
+        /* Centered Container */
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 90%; /* Adjust width for responsiveness */
+            max-width: 600px; /* Limit maximum width */
+            background: rgba(3, 252, 127, 0.877); /* Semi-transparent background */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* Button Style */
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ffffff; /* White background */
+            color: #000000; /* Black text */
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #000000; /* Black background */
+            color: #ffffff; /* White text */
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Video -->
+    <video autoplay loop muted playsinline class="background-video">
+        <source src="images/whitesocksonly.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Centered Text Content -->
+    <div class="container">
+        <h1>Thank You for Your Purchase!</h1>
+        <p>Your payment was successful. You will receive an email confirmation shortly.</p>
+        <a href="/" class="button">Go Back to Shop</a>
+    </div>
+</body>
+</html>
