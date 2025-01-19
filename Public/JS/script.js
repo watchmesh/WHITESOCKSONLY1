@@ -7,7 +7,7 @@ document.getElementById('checkout-button').addEventListener('click', () => {
   const selectedProduct = document.querySelector('input[name="product"]:checked').value;
 
   // Fetch the Checkout Session from the backend
-  fetch('/create-checkout-session', {
+  fetch('/api/create-checkout-session', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

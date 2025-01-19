@@ -1,89 +1,73 @@
-/*****************************************************
- * server.js
- * 
- * 1) Install dependencies:
- *      npm install express stripe body-parser
- * 
- * 2) Replace the placeholders below:
- *    - 'YOUR_SECRET_KEY' with your Stripe secret key
- *    - 'whsec_...' with your webhook signing secret
- * 
- * 3) Start server:
- *      node server.js
- *****************************************************/
-
 const express = require('express');
 const bodyParser = require('body-parser');
-const stripe = require('stripe')('YOUR_SECRET_KEY'); 
-// ^^^ Replace with your real secret key from the Stripe Dashboard
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Use your Stripe secret key from .env
+require('dotenv').config(); // Load .env variables for local development
 
 const app = express();
 
-/**
- * 1) We parse JSON for /create-checkout-session
- *    so we can handle request bodies in JSON (if needed)
- */
+// Middleware to parse JSON for general endpoints
 app.use(express.json());
 
-/**
- * 2) For the /webhook endpoint, Stripe needs the raw body
- *    (not JSON-parsed) to verify the signature.
- */
+// Middleware to parse raw body for webhook verification
 app.use('/webhook', bodyParser.raw({ type: 'application/json' }));
 
 /**
- * 3) Create a Checkout Session with adjustable_quantity
+ * Create a Stripe Checkout Session
  */
-app.post('/create-checkout-session', async (req, res) => {
+app.post('/api/create-checkout-session', async (req, res) => {
   try {
+    // Retrieve product details from request body
+    const { product } = req.body;
+
+    // Define product prices and details
+    const products = {
+      one_pair: { name: '1 Pair of Socks', price: 600 }, // £6 in pence
+      seven_pairs: { name: '7 Pairs of Socks', price: 1000 }, // £10 in pence
+    };
+
+    // Validate product
+    if (!products[product]) {
+      return res.status(400).json({ error: 'Invalid product selected' });
+    }
+
+    // Create Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-
       line_items: [
         {
           price_data: {
-            currency: 'usd',
+            currency: 'gbp',
             product_data: {
-              name: 'Your Product',
+              name: products[product].name,
             },
-            unit_amount: 5000, // e.g. $50.00 in cents
-          },
-          // Enable adjustable quantity
-          adjustable_quantity: {
-            enabled: true,
-            minimum: 1,
-            maximum: 10,
+            unit_amount: products[product].price,
           },
           quantity: 1,
         },
       ],
-
       mode: 'payment',
-      success_url: 'https://your-site.com/success',
-      cancel_url: 'https://your-site.com/cancel',
+      success_url: 'https://whitesocksonly-1.vercel.app/success.html', // Redirect after success
+      cancel_url: 'https://whitesocksonly-1.vercel.app/cancel.html',   // Redirect after cancel
     });
 
-    // Send the session ID back to the client
+    // Send the session ID to the client
     res.json({ id: session.id });
   } catch (err) {
     console.error('Error creating Checkout Session:', err);
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: 'Failed to create Checkout Session' });
   }
 });
 
 /**
- * 4) Webhook endpoint to handle checkout.session.completed
- *    This is where you can fetch the *final* line items
- *    after the customer adjusts quantities during checkout.
+ * Webhook to handle Stripe events
  */
-
-// Replace with the webhook signing secret you find in Stripe Dashboard
-const endpointSecret = 'whsec_XXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET; // Use your Webhook Secret from .env
 
 app.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'];
 
   let event;
+
   try {
     // Verify the event came from Stripe
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
@@ -97,35 +81,33 @@ app.post('/webhook', async (req, res) => {
     const session = event.data.object;
 
     try {
-      // Retrieve final line items (quantity, etc.) after checkout completes
+      // Retrieve final line items after checkout completes
       const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
 
-      // Fulfill the purchase in your own system
-      // e.g., update DB, send confirmation emails, etc.
       console.log('Session ID:', session.id);
-      console.log('Line Items:', lineItems);
+      console.log('Line Items:', lineItems.data);
 
-      // Example of how you'd process them:
-      // lineItems.data.forEach(item => {
-      //   console.log('Item Description:', item.description);
-      //   console.log('Quantity Purchased:', item.quantity);
-      //   // Handle your inventory or order logic here...
-      // });
+      // Example: Handle fulfillment logic (e.g., update database)
+      lineItems.data.forEach(item => {
+        console.log('Item:', item.description, 'Quantity:', item.quantity);
+        // Add your inventory/order management logic here
+      });
 
       res.status(200).send('Checkout session completed!');
     } catch (err) {
       console.error('Error retrieving line items:', err.message);
-      return res.status(400).send(`Error retrieving line items: ${err.message}`);
+      res.status(500).send(`Error retrieving line items: ${err.message}`);
     }
   } else {
-    // Return a 200 for all other event types to avoid retries
+    // Return 200 for unhandled event types to avoid Stripe retries
     res.sendStatus(200);
   }
 });
 
 /**
- * 5) Start the server
+ * Start the server
  */
-app.listen(4242, () => {
-  console.log('Server running on http://localhost:4242');
+const PORT = process.env.PORT || 4242;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
