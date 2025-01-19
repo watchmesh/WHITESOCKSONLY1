@@ -6,7 +6,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Securely loa
 const app = express();
 
 // Middleware to serve static files
-app.use(express.static('public'));
+app.use(express.static('Public'));
 
 // Middleware to parse JSON requests
 app.use(express.json());
