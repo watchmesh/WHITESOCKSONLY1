@@ -5,10 +5,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>White Socks Only</title>
+  <!-- Use 'Public' with a capital P to match your folder name -->
   <link rel="stylesheet" href="Public/css/style.css">
 </head>
 <body>
+
   <video autoplay loop muted playsinline class="background-video">
+    <!-- Again, 'Public' has a capital P -->
     <source src="Public/images/whitesocksonly.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
@@ -81,10 +84,11 @@
     </section>
   </div>
 
-  <!-- Load Stripe once, at the bottom -->
-  <script src="https://JS.stripe.com/v3"></script>
-  <script src="/JS/script.js"></script>
-  <script src="JS/slider.js"></script>
+  <!-- Correct Stripe JS URL: all lowercase in the domain -->
+  <script src="https://js.stripe.com/v3"></script>
+  <!-- Local scripts: use 'Public/JS' to match the exact folder name -->
+  <script src="Public/JS/script.js"></script>
+  <script src="Public/JS/slider.js"></script>
 
 </body>
 </html>
