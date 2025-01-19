@@ -53,14 +53,21 @@ app.post('/create-checkout-session', async (req, res) => {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: priceId,
+          price_data: {
+            currency: 'gbp',
+            product_data: {
+              name: 'Your Product Name',
+            },
+            unit_amount: 1000, // 10 GBP in pence
+          },
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: 'http://localhost:4242/success', // or your deployed domain
-      cancel_url: 'http://localhost:4242/cancel',
+      success_url: 'https://watchmesh.github.io/WHITESOCKSONLY1/success.html', // Update this
+      cancel_url: 'https://watchmesh.github.io/WHITESOCKSONLY1/cancel.html',   // Update this
     });
+    
 
     // Send back the session ID so the frontend can redirect
     res.json({ id: session.id });
