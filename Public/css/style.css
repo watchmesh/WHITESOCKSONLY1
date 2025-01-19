@@ -6,6 +6,25 @@
     font-family: 'California', sans-serif; /* Or any font you prefer */
 }
 
+@font-face {
+    font-family: 'California';
+    src: url('Public/fonts/california.woff2') format('woff2'), /* Modern browsers */
+         url('Public/fonts/california.woff') format('woff'),   /* Older browsers */
+         url('Public/fonts/california.ttf') format('truetype'); /* Fallback */
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+
+body {
+  font-family: 'California', Arial, sans-serif; /* Fallback to Arial */
+}
+
+h1, h2, h3 {
+  font-family: 'California', sans-serif;
+}
+
+
 /* Enable Smooth Scrolling */
 html {
     scroll-behavior: smooth;
