@@ -5,14 +5,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>White Socks Only</title>
-  <!-- Use 'Public' with a capital P to match your folder name -->
-  <link rel="stylesheet" href="Public/css/style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<!-- Add ARIA labels -->
+<nav aria-label="Main navigation">
+  <ul class="navigation">
+    <li><a href="#shop" aria-current="page">Shop</a></li>
+    <!-- ... -->
+  </ul>
+</nav>
 
+<!-- Add video text alternative -->
+<div class="video-alternative" aria-hidden="true">
+  <p>White socks rotating display</p>
+</div>
   <video autoplay loop muted playsinline class="background-video">
-    <!-- Again, 'Public' has a capital P -->
-    <source src="Public/images/whitesocksonly.mp4" type="video/mp4">
+    <source src="/images/whitesocksonly.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
@@ -25,20 +34,69 @@
       </ul>
     </nav>
   </div>
+  <div class="mobile-menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div> 
+  <style>
+  /* Mobile-first approach */
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.8);
+  }
 
+  @media (min-width: 768px) {
+    .sidebar {
+      position: fixed;
+      width: 200px;
+      height: 100%;
+    }
+  }
+
+  /* Mobile menu styles */
+  .mobile-menu-toggle {
+    display: none;
+    cursor: pointer;
+    padding: 15px;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1001;
+  }
+
+  @media (max-width: 767px) {
+    .mobile-menu-toggle {
+      display: block;
+    }
+    .sidebar {
+      display: none;
+    }
+    .sidebar.active {
+      display: block;
+    }
+    .main-content {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+</style>
   <div class="main-content">
     <section id="shop">
       <h2>Shop</h2>
       <div class="slider">
         <div class="slider-images">
           <div class="slide">
-            <img src="Public/images/buysock1.png" alt="White Socks (buysock1)" class="zoomable">
+            <img src="images/buysock1.png" alt="White Socks (buysock1)" class="zoomable">
           </div>
           <div class="slide">
-            <img src="Public/images/buysock.png" alt="White Socks (buysock)" class="zoomable">
+            <img src="images/buysock.png" alt="White Socks (buysock)" class="zoomable">
           </div>
           <div class="slide">
-            <img src="Public/images/buysock2.png" alt="White Socks (buysock2)" class="zoomable">
+            <img src="images/buysock2.png" alt="White Socks (buysock2)" class="zoomable">
           </div>
         </div>
         <button class="nav-button" id="prev">Previous</button>
@@ -74,21 +132,21 @@
         </a>
         <div class="profiles">
           <a href="https://www.instagram.com/zvxx483/" target="_blank" class="profile-link">
-            <img src="Public/images/ahmed.png" alt="Ahmed's Instagram" class="profile-image">
+            <img src="images/ahmed.png" alt="Ahmed's Instagram" class="profile-image">
           </a>
           <a href="https://www.instagram.com/boogerfactory/" target="_blank" class="profile-link">
-            <img src="Public/images/jay.png" alt="Jay's Instagram" class="profile-image">
+            <img src="images/jay.png" alt="Jay's Instagram" class="profile-image">
           </a>
         </div>
       </div>
     </section>
   </div>
 
-  <!-- Correct Stripe JS URL: all lowercase in the domain -->
+  <!-- Stripe JS -->
   <script src="https://js.stripe.com/v3"></script>
-  <!-- Local scripts: use 'Public/JS' to match the exact folder name -->
-  <script src="Public/JS/script.js"></script>
-  <script src="Public/JS/slider.js"></script>
+  <!-- Local scripts -->
+  <script src="JS/script.js"></script>
+  <script src="JS/slider.js"></script>
 
 </body>
 </html>

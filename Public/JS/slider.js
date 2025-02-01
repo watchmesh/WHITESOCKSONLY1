@@ -39,4 +39,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize the position (starts at slide 0)
     updateSlider();
   });
-  
+// In slider.js - Add touch support
+let touchStartX = 0;
+let touchEndX = 0;
+
+sliderImages.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+sliderImages.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  if (touchStartX - touchEndX > 50) currentIndex++;
+  if (touchEndX - touchStartX > 50) currentIndex--;
+  updateSlider();
+});

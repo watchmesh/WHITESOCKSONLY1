@@ -3,56 +3,49 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: 'California', sans-serif; /* Or any font you prefer */
-}
-
-@font-face {
+    font-family: 'California', sans-serif;
+  }
+  
+  @font-face {
     font-family: 'California';
-    src: url('Public/fonts/california.woff2') format('woff2'), /* Modern browsers */
-         url('Public/fonts/california.woff') format('woff'),   /* Older browsers */
-         url('Public/fonts/california.ttf') format('truetype'); /* Fallback */
+    src: url('Public/fonts/california.woff2') format('woff2'),
+         url('Public/fonts/california.woff') format('woff'),
+         url('Public/fonts/california.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
   }
   
-
-body {
-  font-family: 'California', Arial, sans-serif; /* Fallback to Arial */
-}
-
-h1, h2, h3 {
-  font-family: 'California', sans-serif;
-}
-
-
-/* Enable Smooth Scrolling */
-html {
+  body {
+    font-family: 'California', Arial, sans-serif;
+    /* For mobile fallback background image (when video is hidden) */
+    background: #000;
+  }
+  
+  h1, h2, h3 {
+    font-family: 'California', sans-serif;
+  }
+  
+  /* Enable Smooth Scrolling */
+  html {
     scroll-behavior: smooth;
-    /* height: 100%;  <-- Commented out to allow page to grow with content */
-}
-
-/*body {
-    /* height: 100%;  <-- Commented out to allow normal document scrolling */
-    /* display: flex; <-- Commented out so the body doesn't constrain scrolling */
-    /* Let body default to display: block for normal flow */
-
-/* Background Video Styling */
-/* Full-Screen Video Background */
-.background-video {
-    position: fixed; /* Sticks the video to the viewport */
-    top: 0; /* Aligns the video to the top of the screen */
-    left: 0; /* Aligns the video to the left of the screen */
-    width: 100%; /* Ensures the video spans the entire width */
-    height: 100%; /* Ensures the video spans the entire height */
-    object-fit: cover; /* Scales the video to fill the screen while preserving aspect ratio */
-    z-index: -1; /* Places the video behind other content */
-    background-size: cover; /* Ensures no blank spaces in the background */
-}
-
-
-/* Sidebar Navigation Styling */
-
-.sidebar {
+  }
+  
+  /* Background Video Styling */
+  .background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    background-size: cover;
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+  
+  /* Sidebar Navigation Styling */
+  .sidebar {
     position: fixed;
     top: 0;
     left: 0;
@@ -63,23 +56,21 @@ html {
     align-items: center;
     padding: 0;
     border: none;
-}
-
-.navigation {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  
+  .navigation {
     list-style: none;
-    padding: 0;
-    margin: 0;
     width: 100%;
-}
-
-.navigation li {
-    margin: 0;
     padding: 0;
+    margin: 0;
+  }
+  
+  .navigation li {
     text-align: center;
-    border: none;
-}
-
-.navigation a {
+  }
+  
+  .navigation a {
     color: #fff;
     text-decoration: none;
     font-size: 20px;
@@ -87,23 +78,20 @@ html {
     display: block;
     padding: 20px 0;
     background-color: transparent;
-    border: none;
-}
-
-.navigation a:hover {
+  }
+  
+  .navigation a:hover {
     color: #ddd;
-    background-color: transparent;
-}
-
-/* Main Content Styling */
-.main-content {
+  }
+  
+  /* Main Content Styling */
+  .main-content {
     margin-left: 200px;
     width: calc(100% - 200px);
-    /* overflow: auto; <-- Commented out so .main-content isn't a separate scroll container */
-}
-
-/* Sections Styling */
-section {
+  }
+  
+  /* Sections Styling */
+  section {
     padding: 100px 20px;
     min-height: 100vh;
     display: flex;
@@ -111,16 +99,16 @@ section {
     align-items: center;
     justify-content: center;
     position: relative;
-}
-
-section h2 {
+  }
+  
+  section h2 {
     font-size: 48px;
     margin-bottom: 30px;
     color: #fff;
-}
-
-/* Overlay for Readability in Sections */
-section::before {
+  }
+  
+  /* Overlay for Readability in Sections */
+  section::before {
     content: '';
     position: absolute;
     top: 0;
@@ -129,38 +117,35 @@ section::before {
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     z-index: -1;
-}
-
-/* Slider Container */
-.slider {
+  }
+  
+  /* Slider Container */
+  .slider {
     position: relative;
     max-width: 400px;
     margin: 20px auto;
     overflow: hidden;
     border-radius: 10px;
-}
-
-/* Slider Images Container */
-.slider-images {
+  }
+  
+  .slider-images {
     display: flex;
     transition: transform 0.5s ease-in-out;
-}
-
-/* Individual Slide */
-.slide {
+  }
+  
+  .slide {
     min-width: 100%;
     height: auto;
-}
-
-/* Slide Image */
-.slide img {
+  }
+  
+  .slide img {
     width: 100%;
     height: auto;
     display: block;
-}
-
-/* Navigation Buttons */
-.nav-button {
+  }
+  
+  /* Navigation Buttons */
+  .nav-button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -172,72 +157,72 @@ section::before {
     border: none;
     border-radius: 5px;
     z-index: 10;
-}
-
-#prev {
+  }
+  
+  #prev {
     left: 10px;
-}
-
-#next {
+  }
+  
+  #next {
     right: 10px;
-}
-
-/* Price Styling */
-.price {
+  }
+  
+  /* Price Styling */
+  .price {
     margin-top: 15px;
     font-size: 24px;
     color: #fff;
     text-align: center;
-}
-
-/* Buy Now Button Styling */
-.buy-now-button {
+  }
+  
+  /* Buy Now Button Styling */
+  .buy-now-button {
     display: inline-block;
     margin-top: 10px;
     padding: 15px 40px;
     font-size: 1.5rem;
     font-weight: bold;
     color: rgb(0, 0, 0);
-    background:  #ffffff;
+    background: #ffffff;
     border: none;
     border-radius: 50px;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
-}
-
-.buy-now-button:hover {
+  }
+  
+  .buy-now-button:hover {
     background: linear-gradient(45deg, #FF4500, #FF6347);
     transform: scale(1.1);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
-}
-
-.buy-now-button:active {
+  }
+  
+  .buy-now-button:active {
     transform: scale(1);
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Contact Section Specific Styling */
-#contact {
+  }
+  
+  /* Contact Section Specific Styling */
+  #contact {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 50px 20px;
     min-height: 100vh;
     position: relative;
-}
-
-#contact h2 {
+  }
+  
+  #contact h2 {
     margin-bottom: 30px;
-}
-
-.contact-container {
+  }
+  
+  .contact-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.main-ig-link {
+  }
+  
+  .main-ig-link {
     font-size: 24px;
     color: #fff;
     text-decoration: none;
@@ -246,86 +231,98 @@ section::before {
     padding: 10px 20px;
     border-radius: 50px;
     transition: background-color 0.3s, color 0.3s;
-}
-
-.main-ig-link:hover {
+  }
+  
+  .main-ig-link:hover {
     background-color: #fff;
     color: #000;
-}
-
-.profiles {
+  }
+  
+  .profiles {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 40px;
-}
-
-.profile-link {
+  }
+  
+  .profile-link {
     display: block;
     overflow: hidden;
-}
-
-.profile-image {
+  }
+  
+  .profile-image {
     width: 200px;
     height: auto;
     border-radius: 10px;
     transition: transform 0.3s, filter 0.3s;
-}
-
-.profile-image:hover {
+  }
+  
+  .profile-image:hover {
     transform: scale(1.1);
     filter: grayscale(100%);
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
+  }
+  
+  /* Responsive Adjustments for Tablets and Smaller Devices */
+  @media (max-width: 768px) {
     .sidebar {
-        width: 60px;
+      width: 60px;
     }
-
     .navigation a {
-        font-size: 16px;
-        padding: 8px 0;
+      font-size: 16px;
+      padding: 8px 0;
     }
-
     .main-content {
-        margin-left: 60px;
-        width: calc(100% - 60px);
+      margin-left: 60px;
+      width: calc(100% - 60px);
     }
-
-    section h2 {
-        font-size: 36px;
-    }
-
-    .nav-button {
-        font-size: 14px;
-        padding: 8px 16px;
-    }
-
-    .profile-image {
-        width: 150px;
-    }
-}
-
-@media (max-width: 480px) {
-    .navigation a {
-        font-size: 14px;
-    }
-
     section {
-        padding: 80px 15px;
+      padding: 80px 15px;
     }
-
     section h2 {
-        font-size: 28px;
+      font-size: 36px;
     }
-
     .nav-button {
-        font-size: 12px;
-        padding: 6px 12px;
+      font-size: 14px;
+      padding: 8px 16px;
     }
-
     .profile-image {
-        width: 120px;
+      width: 150px;
     }
-}
+    
+    /* Hide background video on smaller devices */
+    .background-video {
+      display: none;
+    }
+    
+    /* Apply fallback background image */
+    body {
+      background: url('fallback-image.jpg') center/cover no-repeat;
+    }
+  }
+  
+  /* Responsive Adjustments for Phones */
+  @media (max-width: 480px) {
+    .navigation a {
+      font-size: 14px;
+    }
+    section {
+      padding: 60px 10px;
+    }
+    section h2 {
+      font-size: 28px;
+    }
+    .nav-button {
+      font-size: 12px;
+      padding: 6px 12px;
+    }
+    .profile-image {
+      width: 120px;
+    }
+  }
+  
+  /* Image Optimization */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  

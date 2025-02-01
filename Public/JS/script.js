@@ -5,9 +5,14 @@ const stripe = Stripe('pk_live_51KgsET2Qdt70x3V6rzTceZ77TfVvmPw0dNg5eDKy63atVITY
 document.getElementById('checkout-button').addEventListener('click', () => {
   // Get the selected product value
   const selectedProduct = document.querySelector('input[name="product"]:checked').value;
-
+document.getElementById('checkout-button').addEventListener('click', () => {
+  const selected = document.querySelector('input[name="product"]:checked');
+  if (!selected) {
+    alert('Please select a product option');
+    return;
+  }
   // Fetch the Checkout Session from the backend
-  fetch('/api/create-checkout-session', {
+  fetch('/create-checkout-session', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -28,4 +33,11 @@ document.getElementById('checkout-button').addEventListener('click', () => {
       console.error('Error:', error);
       alert('There was an error. Please try again.');
     });
+app.use((req, res, next) => {
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self' https://*.stripe.com;"
+  );
+  next();
+  });    
 });
