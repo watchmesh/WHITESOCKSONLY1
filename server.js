@@ -8,11 +8,15 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Load Stripe 
 const app = express();
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET; // Webhook secret
 
-// Middleware for parsing JSON in normal routes
-app.use(express.json());
+// ----------------------
+// IMPORTANT: Order of Middleware
+// ----------------------
 
-// Middleware for verifying raw body on webhook route
+// 1. For the webhook endpoint, use the raw body parser BEFORE any global body parser:
 app.use('/webhook', bodyParser.raw({ type: 'application/json' }));
+
+// 2. Global JSON parser for all other routes
+app.use(express.json());
 
 // Serve static files from the "Public" folder
 console.log('Serving static files from:', path.join(__dirname, 'Public'));
@@ -82,11 +86,8 @@ app.post('/webhook', async (req, res) => {
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      sig,
-      endpointSecret
-    );
+    // Using the raw body (Buffer) here is crucial for verifying the signature
+    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
     console.error(`Webhook Error: ${err.message}`);
     return res.status(400).send(`Webhook Error: ${err.message}`);
