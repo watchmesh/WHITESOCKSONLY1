@@ -21,8 +21,8 @@ app.post('/api/create-checkout-session', async (req, res) => {
 
     // Define product prices and details
     const products = {
-      one_pair: { name: '1 Pair of Socks', price: 600 }, // £6 in pence
-      seven_pairs: { name: '7 Pairs of Socks', price: 1000 }, // £10 in pence
+      one_pair: { name: '1 Pair of Socks', price: 600 },   // £6 in pence
+      seven_pairs: { name: '7 Pairs of Socks', price: 1000 } // £10 in pence
     };
 
     // Validate product
@@ -98,6 +98,11 @@ app.post('/webhook', async (req, res) => {
       console.error('Error retrieving line items:', err.message);
       res.status(500).send(`Error retrieving line items: ${err.message}`);
     }
+  } else if (event.type === 'checkout.session.expired') {
+    const session = event.data.object;
+    console.log('Checkout session expired:', session.id);
+    // Optionally, implement additional logic for expired sessions here
+    res.status(200).send('Checkout session expired.');
   } else {
     // Return 200 for unhandled event types to avoid Stripe retries
     res.sendStatus(200);
