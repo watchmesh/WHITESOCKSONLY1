@@ -10,8 +10,8 @@ export default async function handler(req, res) {
 
     // Define product prices
     const products = {
-      one_pair: { name: '1 Pair of Socks', price: 600 }, // £6
-      seven_pairs: { name: '7 Pairs of Socks', price: 1000 }, // £10
+      one_pair: { name: '1 Pair of Socks', price: 600 },   // £6 in pence
+      two_pairs: { name: '2 Pairs of Socks', price: 1000 },  // £10 in pence
     };
 
     if (!products[product]) {
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
       cancel_url: `${req.headers.origin}/cancel.html`,
     });
 
-    res.status(200).json({ sessionId: session.id });
+    res.status(200).json({ id: session.id });
   } catch (error) {
     console.error('Error creating checkout session:', error);
     res.status(500).json({ error: 'Internal Server Error' });

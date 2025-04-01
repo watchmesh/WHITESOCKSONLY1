@@ -1,123 +1,78 @@
-require('dotenv').config(); // Load environment variables from .env
+// server.js
+require('dotenv').config(); // Load variables from .env
 
 const express = require('express');
-const path = require('path');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Use the secret key from the environment
 const bodyParser = require('body-parser');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Load Stripe with secret key
+const path = require('path');
 
 const app = express();
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET; // Webhook secret
+const PORT = process.env.PORT || 3000;
 
-// ----------------------
-// IMPORTANT: Order of Middleware
-// ----------------------
+// Middleware to parse JSON bodies
+app.use(bodyParser.json());
+// Serve static files (HTML, CSS, JS) from the "public" folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-// 1. For the webhook endpoint, use the raw body parser BEFORE any global body parser:
-app.use('/webhook', bodyParser.raw({ type: 'application/json' }));
+// Logging middleware (optional)
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
 
-// 2. Global JSON parser for all other routes
-app.use(express.json());
-
-// Serve static files from the "Public" folder
-console.log('Serving static files from:', path.join(__dirname, 'Public'));
-app.use(express.static('Public'));
-
-// Serve the main page (index.html) from the Public folder
+// Serve the main HTML file
 app.get('/', (req, res) => {
-  const resolvedPath = path.join(__dirname, 'Public', 'index.html');
-  console.log('Resolved Path for index.html:', resolvedPath);
-  res.sendFile(resolvedPath);
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-/**
- * CREATE A CHECKOUT SESSION
- */
-app.post('/create-checkout-session', async (req, res) => {
-  try {
-    console.log('Product received:', req.body.product);
-
-    // Determine the Stripe Price ID based on the selected product
-    let priceId;
-    if (req.body.product === '1-pair') {
-      priceId = 'price_1Qi6yw2Qdt70x3V6Oarrel3m'; // Replace with your actual Stripe Price ID
-    } else if (req.body.product === '2-pairs') {
-      priceId = 'price_1QiL1f2Qdt70x3V6poSusOvl'; // Replace with your actual Stripe Price ID
-    } else {
-      return res.status(400).json({ error: 'Invalid product selection' });
-    }
-
-    // Create a Stripe Checkout Session
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price: priceId, // Use Stripe Price ID
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: 'https://whitesocksonly-1.vercel.app/success.html',
-      cancel_url: 'https://whitesocksonly-1.vercel.app/cancel.html',
-    });
-
+// Create checkout session endpoint
+// This route is available at http://localhost:3000/api/create-checkout-session
+app.post('/api/create-checkout-session', (req, res) => {
+  console.log('Received request to create checkout session:', req.body);
+  
+  const { product } = req.body;
+  let priceId;
+  
+  if (product === '1-pair') {
+    priceId = 'price_1Qi6yw2Qdt70x3V6Oarrel3m';
+    console.log('Selected 1-pair product with price ID:', priceId);
+  } else if (product === '2-pairs') {
+    priceId = 'price_1QiL1f2Qdt70x3V6poSusOvl';
+    console.log('Selected 2-pairs product with price ID:', priceId);
+  } else {
+    console.error('Invalid product selected:', product);
+    return res.status(400).json({ error: 'Invalid product selected' });
+  }
+  
+  console.log('Creating checkout session with Stripe...');
+  stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1,
+      },
+    ],
+    // Enable shipping address collection for allowed countries.
+    shipping_address_collection: {
+      allowed_countries: ['US', 'CA', 'GB'] // Adjust as needed.
+    },
+    mode: 'payment',
+    success_url: `${req.headers.origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${req.headers.origin}/cancel.html`,
+  })
+  .then(session => {
+    console.log('Checkout session created successfully:', session.id);
     res.json({ id: session.id });
-  } catch (error) {
-    console.error('Error creating checkout session:', error.message);
+  })
+  .catch(error => {
+    console.error('Error creating checkout session:', error);
     res.status(500).json({ error: error.message });
-  }
+  });
 });
 
-/**
- * SUCCESS & CANCEL PAGES
- */
-app.get('/success', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Public', 'success.html'));
-});
-
-app.get('/cancel', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Public', 'cancel.html'));
-});
-
-/**
- * WEBHOOK ENDPOINT
- */
-app.post('/webhook', async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  let event;
-
-  try {
-    // Using the raw body (Buffer) here is crucial for verifying the signature
-    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-  } catch (err) {
-    console.error(`Webhook Error: ${err.message}`);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  // Handle successful payment
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    
-    try {
-      // Retrieve complete session details
-      const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
-        expand: ['line_items.data.price.product']
-      });
-
-      // Implement your fulfillment logic here
-      console.log('Payment succeeded:', fullSession);
-    } catch (err) {
-      console.error('Error processing webhook:', err);
-      return res.status(500).send('Webhook processing failed');
-    }
-  }
-
-  res.status(200).end();
-});
-
-/**
- * START THE SERVER
- */
-const PORT = process.env.PORT || 4242;
+// Start the server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Server time: ${new Date().toISOString()}`);
 });

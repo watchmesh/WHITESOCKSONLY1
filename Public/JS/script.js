@@ -1,43 +1,60 @@
-// Initialize Stripe
+// Initialize Stripe with your live publishable key
 const stripe = Stripe('pk_live_51KgsET2Qdt70x3V6rzTceZ77TfVvmPw0dNg5eDKy63atVITYYUBzGzuYbq29jfZ9DUxSWimtM7K61hdJ3CucWKKb00W7VCuZZp');
 
-// Listen for the Buy Now button click
-document.getElementById('checkout-button').addEventListener('click', () => {
-  // Get the selected product value
-  const selectedProduct = document.querySelector('input[name="product"]:checked').value;
-document.getElementById('checkout-button').addEventListener('click', () => {
-  const selected = document.querySelector('input[name="product"]:checked');
-  if (!selected) {
-    alert('Please select a product option');
-    return;
-  }
-  // Fetch the Checkout Session from the backend
-  fetch('/create-checkout-session', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ product: selectedProduct }), // Send selected product to backend
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Failed to create checkout session');
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM fully loaded, initializing Stripe checkout...');
+
+  const checkoutButton = document.getElementById('checkout-button');
+
+  if (checkoutButton) {
+    console.log('Checkout button found, adding event listener...');
+
+    checkoutButton.addEventListener('click', () => {
+      console.log('Checkout button clicked');
+
+      const selected = document.querySelector('input[name="product"]:checked');
+      if (!selected) {
+        alert('Please select a product option');
+        return;
       }
-      return response.json();
-    })
-    .then(session => {
-      // Redirect to Stripe Checkout
-      return stripe.redirectToCheckout({ sessionId: session.id });
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('There was an error. Please try again.');
+
+      const selectedProduct = selected.value;
+      console.log('Selected product:', selectedProduct);
+
+      checkoutButton.disabled = true;
+      checkoutButton.textContent = 'Processing...';
+
+      console.log('Sending request to backend endpoint...');
+      // Update the URL to point to your backend (assuming it's on port 4242)
+      fetch('http://localhost:4242/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product: selectedProduct }),
+      })
+      .then(response => {
+        console.log('Response status:', response.status);
+        return response.text();
+      })
+      .then(text => {
+        console.log('Raw response:', text);
+        try {
+          return JSON.parse(text);
+        } catch (err) {
+          throw new Error('Invalid JSON returned: ' + text);
+        }
+      })
+      .then(session => {
+        console.log('Session created, redirecting to Stripe checkout...');
+        return stripe.redirectToCheckout({ sessionId: session.id });
+      })
+      .catch(error => {
+        console.error('Error in checkout process:', error);
+        alert('There was an error: ' + error.message);
+        checkoutButton.disabled = false;
+        checkoutButton.textContent = 'Buy Now';
+      });
     });
-app.use((req, res, next) => {
-  res.setHeader(
-    'Content-Security-Policy',
-    "default-src 'self' https://*.stripe.com;"
-  );
-  next();
-  });    
+  } else {
+    console.error('Checkout button not found');
+  }
 });
