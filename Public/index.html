@@ -3,28 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Essential for responsive mobile design -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>White Socks Only</title>
-  <!-- CSS file in Public/css/style.css -->
-  <link rel="stylesheet" href="css/style.css">
+  <!-- Link to CSS file in public/css/style.css -->
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <!-- Add ARIA labels -->
+  <!-- Main Navigation -->
   <nav aria-label="Main navigation">
     <ul class="navigation">
       <!-- ... other navigation items ... -->
     </ul>
   </nav>
 
-  <!-- Video with text alternative -->
-  <div class="video-alternative" aria-hidden="true">
-  </div>
+  <!-- Video with text alternative (background video) -->
+  <div class="video-alternative" aria-hidden="true"></div>
   <video autoplay loop muted playsinline class="background-video">
-    <!-- Video file in Public/images/whitesocksonly.mp4 -->
-    <source src="images/whitesocksonly.mp4" type="video/mp4">
+    <!-- Video file in public/images/whitesocksonly.mp4 -->
+    <source src="/images/whitesocksonly.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
+  <!-- Sidebar Navigation -->
   <div class="sidebar">
     <nav>
       <ul class="navigation">
@@ -34,14 +35,17 @@
       </ul>
     </nav>
   </div>
-  <div class="mobile-menu-toggle">
+
+  <!-- Mobile Menu Toggle -->
+  <div class="mobile-menu-toggle" role="button" aria-label="Toggle mobile menu">
     <span></span>
     <span></span>
     <span></span>
   </div> 
 
+  <!-- Inline styles for mobile responsiveness for the sidebar & mobile menu -->
   <style>
-    /* Mobile-first approach */
+    /* Mobile-first approach for sidebar */
     .sidebar {
       width: 100%;
       height: auto;
@@ -49,7 +53,6 @@
       padding: 1rem;
       background: rgba(0, 0, 0, 0.8);
     }
-
     @media (min-width: 768px) {
       .sidebar {
         position: fixed;
@@ -57,8 +60,7 @@
         height: 100%;
       }
     }
-
-    /* Mobile menu styles */
+    /* Mobile menu toggle styles */
     .mobile-menu-toggle {
       display: none;
       cursor: pointer;
@@ -68,7 +70,6 @@
       left: 10px;
       z-index: 1001;
     }
-
     @media (max-width: 767px) {
       .mobile-menu-toggle {
         display: block;
@@ -86,22 +87,23 @@
     }
   </style>
 
+  <!-- Main Content -->
   <div class="main-content">
     <section id="shop">
       <h2>Shop</h2>
       <div class="slider">
         <div class="slider-images">
           <div class="slide">
-            <!-- Image in Public/images/buysock1.png -->
-            <img src="images/buysock1.png" alt="White Socks (buysock1)" class="zoomable">
+            <!-- Image in public/images/buysock1.png -->
+            <img src="/images/buysock1.png" alt="White Socks (buysock1)" class="zoomable">
           </div>
           <div class="slide">
-            <!-- Image in Public/images/buysock.png -->
-            <img src="images/buysock.png" alt="White Socks (buysock)" class="zoomable">
+            <!-- Image in public/images/buysock.png -->
+            <img src="/images/buysock.png" alt="White Socks (buysock)" class="zoomable">
           </div>
           <div class="slide">
-            <!-- Image in Public/images/buysock2.png -->
-            <img src="images/buysock2.png" alt="White Socks (buysock2)" class="zoomable">
+            <!-- Image in public/images/buysock2.png -->
+            <img src="/images/buysock2.png" alt="White Socks (buysock2)" class="zoomable">
           </div>
         </div>
         <button class="nav-button" id="prev">Previous</button>
@@ -137,20 +139,20 @@
         </a>
         <div class="profiles">
           <a href="https://www.instagram.com/zvxx483/" target="_blank" class="profile-link">
-            <img src="images/ahmed.png" alt="Ahmed's Instagram" class="profile-image">
+            <img src="/images/ahmed.png" alt="Ahmed's Instagram" class="profile-image">
           </a>
           <a href="https://www.instagram.com/boogerfactory/" target="_blank" class="profile-link">
-            <img src="images/jay.png" alt="Jay's Instagram" class="profile-image">
+            <img src="/images/jay.png" alt="Jay's Instagram" class="profile-image">
           </a>
         </div>
       </div>
     </section>
   </div>
 
-  <!-- Stripe JS (external) -->
+  <!-- External Stripe JS -->
   <script src="https://js.stripe.com/v3"></script>
-  <!-- Local JavaScript files in Public/JS/ -->
-  <script src="JS/script.js"></script>
-  <script src="JS/slider.js"></script>
+  <!-- Local JavaScript files in public/JS/ -->
+  <script src="/JS/script.js"></script>
+  <script src="/JS/slider.js"></script>
 </body>
 </html>
