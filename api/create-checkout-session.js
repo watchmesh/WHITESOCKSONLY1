@@ -1,46 +1,47 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Secure Stripe key
+// api/create-checkout-session.js
+require('dotenv').config();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
+  // Only allow POST requests
   if (req.method !== 'POST') {
-    return res.status(405).send('Method Not Allowed');
+    res.setHeader("Allow", "POST");
+    return res.status(405).send("Method Not Allowed");
+  }
+  
+  console.log('Received request to create checkout session:', req.body);
+  
+  const { product } = req.body;
+  // Map your products to their actual Stripe Price IDs
+  const productPrices = {
+    one_pair: 'price_1Qi6yw2Qdt70x3V6Oarrel3m',
+    two_pairs: 'price_1QiL1f2Qdt70x3V6poSusOvl'
+  };
+
+  if (!productPrices[product]) {
+    console.error('Invalid product selected:', product);
+    return res.status(400).json({ error: 'Invalid product selected' });
   }
 
   try {
-    const { product } = req.body;
-
-    // Define product prices
-    const products = {
-      one_pair: { name: '1 Pair of Socks', price: 600 },   // £6 in pence
-      two_pairs: { name: '2 Pairs of Socks', price: 1000 },  // £10 in pence
-    };
-
-    if (!products[product]) {
-      return res.status(400).json({ error: 'Invalid product' });
-    }
-
-    // Create Stripe Checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
-          price_data: {
-            currency: 'gbp',
-            product_data: {
-              name: products[product].name,
-            },
-            unit_amount: products[product].price,
-          },
+          price: productPrices[product],
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: `${req.headers.origin}/success.html`,
+      // Use req.headers.origin so that it works in production (on Vercel)
+      success_url: `${req.headers.origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.origin}/cancel.html`,
     });
 
-    res.status(200).json({ id: session.id });
-  } catch (error) {
-    console.error('Error creating checkout session:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.log('Checkout session created successfully:', session.id);
+    return res.status(200).json({ id: session.id });
+  } catch (err) {
+    console.error('Error creating Checkout Session:', err);
+    return res.status(500).json({ error: 'Failed to create Checkout Session' });
   }
-}
+};
