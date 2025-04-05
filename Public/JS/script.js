@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       console.log('Sending request to backend endpoint...');
       // Update the URL to point to your backend (assuming it's on port 4242)
-      fetch('http://localhost:4242/api/create-checkout-session', {
+      fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ product: selectedProduct }),
