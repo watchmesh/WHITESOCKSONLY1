@@ -3,29 +3,23 @@ const stripe = Stripe('pk_live_51KgsET2Qdt70x3V6rzTceZ77TfVvmPw0dNg5eDKy63atVITY
 
 document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM fully loaded, initializing Stripe checkout...');
-
   const checkoutButton = document.getElementById('checkout-button');
 
   if (checkoutButton) {
     console.log('Checkout button found, adding event listener...');
-
     checkoutButton.addEventListener('click', () => {
       console.log('Checkout button clicked');
-
       const selected = document.querySelector('input[name="product"]:checked');
       if (!selected) {
         alert('Please select a product option');
         return;
       }
-
       const selectedProduct = selected.value;
       console.log('Selected product:', selectedProduct);
-
       checkoutButton.disabled = true;
       checkoutButton.textContent = 'Processing...';
 
       console.log('Sending request to backend endpoint...');
-      // Update the URL to point to your backend (assuming it's on port 4242)
       fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
