@@ -1,4 +1,4 @@
-// Initialize Stripe with your live publishable key
+/// Initialize Stripe with your live publishable key
 const stripe = Stripe('pk_live_51KgsET2Qdt70x3V6rzTceZ77TfVvmPw0dNg5eDKy63atVITYYUBzGzuYbq29jfZ9DUxSWimtM7K61hdJ3CucWKKb00W7VCuZZp');
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -27,19 +27,11 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .then(response => {
         console.log('Response status:', response.status);
-        return response.text();
+        return response.json();
       })
-      .then(text => {
-        console.log('Raw response:', text);
-        try {
-          return JSON.parse(text);
-        } catch (err) {
-          throw new Error('Invalid JSON returned: ' + text);
-        }
-      })
-      .then(session => {
+      .then(data => {
         console.log('Session created, redirecting to Stripe checkout...');
-        return stripe.redirectToCheckout({ sessionId: session.id });
+        return stripe.redirectToCheckout({ sessionId: data.id });
       })
       .catch(error => {
         console.error('Error in checkout process:', error);
