@@ -20,16 +20,17 @@ app.post('/api/create-checkout-session', async (req, res) => {
   try {
     const { product } = req.body;
 
-    // Map your products to their actual Stripe Price IDs (replace the placeholders)
+    // Map your products to their actual Stripe Price IDs
     const productPrices = {
       one_pair: 'price_1Qi6yw2Qdt70x3V6Oarrel3m',    // Replace with your live price ID
-      two_pairs: 'price_1QiL1f2Qdt70x3V6poSusOvl'   // Replace with your live price ID
+      two_pairs: 'price_1QiL1f2Qdt70x3V6poSusOvl'     // Replace with your live price ID
     };
 
     if (!productPrices[product]) {
       return res.status(400).json({ error: 'Invalid product selected' });
     }
 
+    // Create the Checkout Session with dynamic success and cancel URLs
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
@@ -37,8 +38,8 @@ app.post('/api/create-checkout-session', async (req, res) => {
         quantity: 1,
       }],
       mode: 'payment',
-      success_url: 'http://localhost:3000/success.html',
-      cancel_url: 'http://localhost:3000/cancel.html',
+      success_url: `${req.headers.origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin}/cancel.html`,
     });
 
     res.json({ id: session.id });
@@ -90,5 +91,5 @@ app.post('/webhook', async (req, res) => {
  */
 const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
