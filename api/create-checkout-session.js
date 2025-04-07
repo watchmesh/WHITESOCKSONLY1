@@ -8,8 +8,6 @@ export default async function handler(req, res) {
   }
   try {
     const { product } = req.body;
-
-    // Map your products to their actual Stripe Price IDs
     const productPrices = {
       '1-pair': 'price_1Qi6yw2Qdt70x3V6Oarrel3m',
       '2-pairs': 'price_1QiL1f2Qdt70x3V6poSusOvl'
