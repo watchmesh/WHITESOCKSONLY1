@@ -1,6 +1,7 @@
 {
-  "dependencies": {
-    "express": "^4.21.2",
-    "stripe": "^17.5.0"
+  "scripts": {
+    "build": "echo 'No build step required for static site'",
+    "dev": "npx serve .",
+    "start": "serve ."
   }
 }
