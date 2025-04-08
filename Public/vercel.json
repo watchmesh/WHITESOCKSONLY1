@@ -1,5 +1,5 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/$1" }
-  ]
+  "version": 2,
+  "buildCommand": "",
+  "outputDirectory": "public"
 }

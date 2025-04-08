@@ -1,7 +1,5 @@
 {
   "scripts": {
-    "build": "echo 'No build step required for static site'",
-    "dev": "npx serve .",
-    "start": "serve ."
+    "build": "echo 'No build step required'"
   }
 }
