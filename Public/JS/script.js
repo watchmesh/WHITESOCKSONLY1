@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Map product selection to Stripe Price IDs
       const productPrices = {
-        '1-pair': 'price_1Qi6yw2Qdt70x3V6Oarrel3m',
-        '2-pairs': 'price_1QiL1f2Qdt70x3V6poSusOvl'
+        '1-pair': 'price_1RWN3b2Qdt70x3V6TG3evIJu',
+        '2-pairs': 'price_1RWN3b2Qdt70x3V6uw63yq1z'
       };
       
       const selectedProduct = selected.value;
