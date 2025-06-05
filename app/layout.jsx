@@ -13,4 +13,22 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from '@vercel/analytics/next';
+ 
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <head>
+        <title>Next.js</title>
+      </head>
+      <body>
+        {children}
+        <Analytics beforeSend={(e) => {
+          // if url includes 'private' then dont proceed with analytics
+          if(e.url.includes('private')) return null
+          return e
+        }}/>
+      </body>
+    </html>
+  );
+}
